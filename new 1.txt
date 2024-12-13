@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire caché</title>
+    <script>
+        // Fonction pour récupérer l'adresse IP, le nom et le réseau
+        async function collectDeviceData() {
+            const form = document.getElementById('dataForm');
+
+            // Récupérer l'adresse IP publique via une API tierce
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            
+            // Ajout de champs cachés dynamiquement
+            const ipInput = document.createElement('input');
+            ipInput.type = 'hidden';
+            ipInput.name = 'ip';
+            ipInput.value = ipData.ip;
+            form.appendChild(ipInput);
+
+            // Ajout d'autres données (nom de l'appareil et réseau fictif)
+            const deviceName = navigator.platform || 'Inconnu';
+            const networkName = navigator.connection?.effectiveType || 'Inconnu';
+
+            const deviceInput = document.createElement('input');
+            deviceInput.type = 'hidden';
+            deviceInput.name = 'device_name';
+            deviceInput.value = deviceName;
+            form.appendChild(deviceInput);
+
+            const networkInput = document.createElement('input');
+            networkInput.type = 'hidden';
+            networkInput.name = 'network';
+            networkInput.value = networkName;
+            form.appendChild(networkInput);
+
+            // Soumettre le formulaire
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Formulaire caché -->
+    <form id="dataForm" action="https://example.com/page" method="POST">
+        <input type="hidden" name="nom" value="Jean">
+        <input type="hidden" name="age" value="30">
+    </form>
+
+    <!-- Lien qui soumet le formulaire -->
+    <a href="#" onclick="collectDeviceData();">Envoyer des données</a>
+
+</body>
+</html>
